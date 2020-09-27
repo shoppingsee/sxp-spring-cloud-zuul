@@ -1,0 +1,29 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: sxp-spring-cloud-zuul
+  cloud:
+    consul:
+      host: 10.10.100.250
+      port: 8500
+      discovery:
+        register: true
+        preferIpAddress: true
+        serviceName: ${spring.application.name}
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 15s
+        instanceId: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+        healthCheckCriticalTimeout: 30s
+        aclToken: 9877092b-5bc2-4ae0-9f1f-6251fedad0fc
+
+zuul:
+  routes:
+    service-b:
+      path: /sc-demo-service-b/**
+      url: http://10.10.100.251:50142
+
+    service-c:
+      path: /sc-demo-service-c/**
+      serviceId: sc-demo-service-c
